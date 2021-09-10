@@ -444,15 +444,15 @@ class Game {
 
             case 2:
 
-                CreatePlayer(0, -200);
-                CreatePointer(0, 0);
-                CreateButton(0, 0, 140, 0, "p1");
-                CreateQuitButton(370, 0, 0, "p1", "left");
-                CreateButton(650, 0, 140, 0, "p1");
-                CreateQuitButton(930, 0, 0, "p1", "right");
-                CreateQuitButton(1130, -220, 1, "p1", "right");
-                CreateButton(1310, 0, 140, 0, "p1");
-                CreateStartButton(1570, 0, 0, "p1");
+                CreatePlayer(-500, -200);
+                CreatePointer(-400, 0);
+                CreateButton(-500, 0, 140, 0, "p1");
+                CreateQuitButton(-130, 0, 0, "p1", "left");
+                CreateButton(150, 0, 140, 0, "p1");
+                CreateQuitButton(430, 0, 0, "p1", "right");
+                CreateQuitButton(630, -220, 1, "p1", "right");
+                CreateButton(810, 0, 140, 0, "p1");
+                CreateStartButton(1070, 0, 0, "p1");
 
             break;
 
