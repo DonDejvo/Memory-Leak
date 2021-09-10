@@ -1,4 +1,4 @@
-import * as Lancelot from "https://cdn.jsdelivr.net/gh/DonDejvo/Lancelot/core.js";
+import * as Lancelot from "https://cdn.jsdelivr.net/gh/DonDejvo/Lancelot/core.min.js";
 
 class Game {
     constructor() {
