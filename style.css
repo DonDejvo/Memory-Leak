@@ -1,0 +1,59 @@
+.control-button {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: black;
+    border: 3px solid white;
+    color: white;
+    font-weight: bold;
+    line-height: 90px;
+    font-size: small;
+    text-align: center;
+    border-radius: 50%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.control-button > span {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#button-left {
+    left: 30px;
+    bottom: 50px;
+}
+
+#button-right {
+    left: 150px;
+    bottom: 50px;
+}
+
+#button-jump {
+    bottom: 90px;
+    right: 30px;
+}
+
+#end-section {
+    background: black;
+    color: white;
+}
+
+#end-section .container {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    padding: 16px;
+}
+
+#end-section h1 {
+    font-size: 48px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+#end-section p {
+    font-size: 18px;
+    margin-top: 42px;
+    margin-bottom: 42px;
+}

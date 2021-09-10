@@ -1,0 +1,36 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/DonDejvo/Lancelot/core.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="play-section" class="game-section">
+            <canvas id="canvas"></canvas>
+            <div id="controls">
+                <div id="button-left" class="control-button">
+                    <span>Left</span>
+                </div>
+                <div id="button-right" class="control-button">
+                    <span>Right</span>
+                </div>
+                <div id="button-jump" class="control-button">
+                    <span>Jump</span>
+                </div>
+            </div>
+        </div>
+        <div id="end-section" class="game-section">
+            <div class="container">
+                <h1>System Failure</h1>
+                <p>A memory leak has been detected and your operating system is stopped to prevent further damage.</p>
+                <p>Thanks for playing.</p>
+            </div>
+        </div>
+    </div>
+    <script src="src/main.js" type="module"></script>
+</body>
+</html>
