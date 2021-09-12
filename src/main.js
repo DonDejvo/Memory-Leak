@@ -656,7 +656,11 @@ class ButtonController extends Lancelot.Component {
         this._pressedByPlayer = Object.values(body._collisions).some(_ => _.size);
         const pressed = (this._pressedByMouse || this._pressedByPlayer);
         if(!sprite._pressed && pressed) {
-            this.scene._resources.get("click-sound").cloneNode(true).play();
+            try {
+                this.scene._resources.get("click-sound").cloneNode(true).play();
+            } catch(err) {
+                
+            }
             if(this.action) this.action();
         }
         sprite._pressed = pressed;
