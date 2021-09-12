@@ -1,4 +1,4 @@
-import * as Lancelot from "./core.js";
+import * as Lancelot from "../lib/core.js";
 
 class Game {
     constructor() {
