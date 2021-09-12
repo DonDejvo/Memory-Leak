@@ -257,7 +257,7 @@ class Game {
             });
             button.AddComponent(menuController);
 
-            button.GetComponent("ButtonController").action = (dur = 900) => {
+            button.GetComponent("ButtonController").action = (dur = 1000) => {
                 const quitButtons = scene.GetEntitiesByGroup("q");
                 for(let btn of quitButtons) {
                     btn.GetComponent("ButtonMenuController").Toggle(dur);
@@ -287,7 +287,7 @@ class Game {
             
             const toggler = new Lancelot.drawable.Rect({
                 fixed: false,
-                width: 14,
+                width: 16,
                 height: sprite._height,
                 zIndex: 6,
                 rotationCount: rotCount,
@@ -346,7 +346,7 @@ class Game {
             });
             button.AddComponent(menuController);
 
-            button.GetComponent("ButtonController").action = (dur = 900) => {
+            button.GetComponent("ButtonController").action = (dur = 1000) => {
                 const optButtons = scene.GetEntitiesByGroup("o");
                 for(let btn of optButtons) {
                     btn.GetComponent("ButtonMenuController").Toggle(dur);
@@ -451,9 +451,9 @@ class Game {
                 CreateQuitButton(-130, 0, 0, "p1", "left");
                 CreateButton(150, 0, 140, 0, "p1");
                 CreateQuitButton(430, 0, 0, "p1", "right");
-                CreateQuitButton(630, -220, 1, "p1", "right");
-                CreateButton(810, 0, 140, 0, "p1");
-                CreateStartButton(1070, 0, 0, "p1");
+                CreateQuitButton(610, -220, 1, "p1", "right");
+                CreateButton(800, 0, 140, 0, "p1");
+                CreateStartButton(1060, 0, 0, "p1");
 
             break;
 
@@ -766,7 +766,7 @@ class MusicRangeSprite extends Lancelot.drawable.Drawable {
     constructor(params) {
         super(params);
         this._width = 140;
-        this._height = 38;
+        this._height = 36;
     }
     get width() {
         return this._rotationCount % 2 == 0 ? this._width : this._height;
