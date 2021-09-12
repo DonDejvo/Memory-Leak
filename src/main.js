@@ -1,4 +1,4 @@
-import * as Lancelot from "https://cdn.jsdelivr.net/gh/DonDejvo/Lancelot/core.js";
+import * as Lancelot from "./core.js";
 
 class Game {
     constructor() {
@@ -70,6 +70,7 @@ class Game {
         const loader = new Lancelot.Loader();
 
         loader
+        .OnProgress((val, obj) => console.log(`${obj.path} ... ${val * 100}%`))
             .SetPath("res")
             .AddImage("player", "assets/player.png")
             .AddAudio("main-theme", "audio/journey-awaits.mp3")
@@ -109,8 +110,8 @@ class Game {
 
         const scene = new Lancelot.Scene({
             resources: this._resources,
-            bounds: [[-500, -500], [2000, 500]],
-            cellDimensions: [100, 100],
+            bounds: [[-1000, -1000], [2000, 500]],
+            cellDimensions: [200, 200],
             input: this._input
         });
 
@@ -286,7 +287,7 @@ class Game {
             
             const toggler = new Lancelot.drawable.Rect({
                 fixed: false,
-                width: 12,
+                width: 14,
                 height: sprite._height,
                 zIndex: 6,
                 rotationCount: rotCount,
@@ -303,7 +304,7 @@ class Game {
             toggler._pos = body._pos;
             
             musicRange.SetPosition(new Lancelot.Vector(x + Math.round(Math.cos(angle)) * (w - sprite._width) / 2, y + Math.round(Math.sin(angle)) * (w - sprite._width) / 2));
-            body.SetPosition(new Lancelot.Vector(musicRange._pos.x - Math.round(Math.cos(angle)) * 20, musicRange._pos.y - Math.round(Math.sin(angle)) * 20));
+            body.SetPosition(new Lancelot.Vector(musicRange._pos.x, musicRange._pos.y));
             
             scene.AddEntity(musicRange);
 
@@ -765,7 +766,7 @@ class MusicRangeSprite extends Lancelot.drawable.Drawable {
     constructor(params) {
         super(params);
         this._width = 140;
-        this._height = 35;
+        this._height = 38;
     }
     get width() {
         return this._rotationCount % 2 == 0 ? this._width : this._height;
@@ -803,7 +804,7 @@ class MusicRangeSprite extends Lancelot.drawable.Drawable {
         ctx.moveTo(this._width * 0.4, -this._height * 0.1);
         ctx.lineTo(this._width * 0.4, this._height * 0.1);
         ctx.stroke();
-        DrawNote(-this._width * 0.4, 0, this._height * 0.3);
+        DrawNote(-this._width * 0.35, 0, this._height * 0.3);
         ctx.restore();
     }
 }
@@ -842,8 +843,8 @@ class MusicRangeController extends Lancelot.Component {
 
             let v = this._moving == 1 ? speed : -speed;
             if(this._direction == 2 || this._direction == 3) v *= -1;
-            let a = sprite._width * 0.25;
-            let b = sprite._width * 0.35;
+            let a = sprite._width * 0.20;
+            let b = sprite._width * 0.34;
             if(this._direction == 2 || this._direction == 3) {
                 [a, b] = [b, a];
             }
