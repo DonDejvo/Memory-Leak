@@ -162,6 +162,12 @@ class Game {
                 }
             });
             player.AddComponent(controller);
+            player.AddComponent(new TrailEffect({
+                zIndex: 19,
+                count: 30,
+                lineWidth: 7,
+                rgb: [255, 255, 255]
+            }));
             scene.AddEntity(player, "Player");
 
             player.SetPosition(new Lancelot.Vector(x, y));
@@ -918,6 +924,48 @@ class PointerSprite extends Lancelot.drawable.Drawable {
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
+        ctx.restore();
+    }
+}
+
+class TrailEffect extends Lancelot.drawable.Drawable {
+    constructor(params) {
+        super(params);
+        this._count = (this._params.count || 45);
+        this._lineWidth = (this._params.lineWidth || 5);
+        this._rgb = (this._params.rgb || [255, 255, 255]);
+        this._previousPositions = [];
+        this._width = (this._params.width || 100);
+        this._height = (this._params.height || 100);
+    }
+    get width() {
+        return this._width;
+    }
+    get height() {
+        return this._height;
+    }
+    Draw(ctx) {
+        this._previousPositions.unshift(this._pos.Clone());
+        if(this._previousPositions.length > this._count) {
+            this._previousPositions.length = this._count;
+        }
+        ctx.save();
+        for(let i = 0; i < this._previousPositions.length - 1; ++i) {
+            const pos1 = this._previousPositions[i];
+            const pos2 = this._previousPositions[i + 1];
+            
+            const grd = ctx.createLinearGradient(pos1.x, pos1.y, pos2.x, pos2.y);
+            grd.addColorStop(0, `rgba(${this._rgb.join(",")},${(this._count - i) / this._count})`);
+            grd.addColorStop(1, `rgba(${this._rgb.join(",")},${(this._count - i - 1) / this._count})`);
+            
+            ctx.beginPath();
+            ctx.strokeStyle = grd;
+            ctx.lineWidth = (this._count - i) / this._count * this._lineWidth + 1;
+            ctx.lineCap = "round";
+            ctx.moveTo(pos1.x, pos1.y);
+            ctx.lineTo(pos2.x, pos2.y);
+            ctx.stroke();
+        }
         ctx.restore();
     }
 }
