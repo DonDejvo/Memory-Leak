@@ -153,7 +153,6 @@ class Game {
                 frictionX: 0.08,
                 frictionY: 0.01,
                 mass: 1,
-                bounce: 1,
                 followBottomObject: true
             });
             player.AddComponent(body, "Body");
