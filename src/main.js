@@ -667,7 +667,7 @@ class ButtonController extends Lancelot.Component {
             } catch(err) {
                 
             }
-            this.scene._camera.Shake(10, 500, 4, Math.random() * Math.PI);
+            
             if(this.action) this.action();
         }
         sprite._pressed = pressed;
