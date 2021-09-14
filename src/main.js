@@ -153,6 +153,7 @@ class Game {
                 frictionX: 0.08,
                 frictionY: 0.01,
                 mass: 1,
+                bounce: 1,
                 followBottomObject: true
             });
             player.AddComponent(body, "Body");
@@ -471,7 +472,7 @@ class Game {
                 CreateButton(-165, -50, 140, 1, "p1");
                 CreateOptButton(170, 50, 3, "p1", "right");
                 CreateButton(215, -90, 140, 3, "p1");
-                CreateQuitButton(260, -180, 0, "p1", "left");
+                CreateQuitButton(265, -180, 0, "p1", "left");
                 CreateButton(215, -240, 70, 3, "p1");
                 CreateButton(50, -210, 70, 0, "p1");
                 CreateButton(305, -255, 140, 0, "p1");
@@ -501,7 +502,7 @@ class Game {
                 CreateButton(-400, 0, 70, 0, "p1");
                 CreateButton(-240, -40, 70, 0, "p1");
                 CreateButton(-40, -80, 140, 0, "p1");
-                let button = CreateQuitButton(-40, -230, 3, "p1 p2", "right");
+                let button = CreateQuitButton(-40, -235, 3, "p1 p2", "right");
                 button.GetComponent("ButtonController").action(100);
                 CreateOptButton(140, -40, 3, "p1", "right");
                 CreateButton(185, -110, 280, 3, "p1");
