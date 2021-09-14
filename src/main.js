@@ -28,12 +28,16 @@ class Game {
             jumping: false
         };
 
-        Lancelot.id("button-left").addEventListener("touchstart", () => this._input.left = true);
-        Lancelot.id("button-left").addEventListener("touchend", () => this._input.left = false);
-        Lancelot.id("button-right").addEventListener("touchstart", () => this._input.right = true);
-        Lancelot.id("button-right").addEventListener("touchend", () => this._input.right = false);
-        Lancelot.id("button-jump").addEventListener("touchstart", () => this._input.jumping = true);
-        Lancelot.id("button-jump").addEventListener("touchend", () => this._input.jumping = false);
+        if("ontouchstart" in document) {
+            Lancelot.id("button-left").addEventListener("touchstart", () => this._input.left = true);
+            Lancelot.id("button-left").addEventListener("touchend", () => this._input.left = false);
+            Lancelot.id("button-right").addEventListener("touchstart", () => this._input.right = true);
+            Lancelot.id("button-right").addEventListener("touchend", () => this._input.right = false);
+            Lancelot.id("button-jump").addEventListener("touchstart", () => this._input.jumping = true);
+            Lancelot.id("button-jump").addEventListener("touchend", () => this._input.jumping = false);
+        } else {
+            Lancelot.hide(Lancelot.id("mobile-controls"));
+        }
 
         window.addEventListener("keydown", (e) => {
             switch(e.key) {
@@ -86,6 +90,8 @@ class Game {
             Lancelot.hide(Lancelot.id("intro-section"));
             Lancelot.show(Lancelot.id("play-section"));
 
+            this._ShowHelp();
+
             const music = this._resources.get("main-theme");
             music.loop = true;
             music.play();
@@ -94,6 +100,25 @@ class Game {
             this._PlayLevel(this._currentLevel);
 
         });
+    }
+    _ShowHelp() {
+        alert(`
+CONTROLS:
+PC:
+LEFT - A
+RIGHT - D
+JUMP - W
+ACTION - LEFT MOUSE
+MOBILE:
+LEFT, RIGHT, JUMP - BUTTONS
+ACTION - TOUCH
+
+GUIDE:
+GAME HAS 6 LEVELS
+YOUR TARGET IS TO REACH START OF EACH LEVEL
+MENU BUTTONS TRIGGER SPECIFIC ACTIONS AFTER YOU CLICK THEM OR TOUCH THEM WITH PLAYER
+TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT SIDE OF THE VOLUME RANGE 
+        `);
     }
     _PlayLevel(number) {
         if(number > 6) {
@@ -165,7 +190,7 @@ class Game {
             player.AddComponent(new Lancelot.drawable.TrailEffect({
                 zIndex: 19,
                 dur: 500,
-                lineWidth: 4,
+                lineWidth: 6,
                 rgb: [255, 255, 255]
             }));
             scene.AddEntity(player, "Player");
