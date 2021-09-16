@@ -484,7 +484,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateQuitButton(-130, 0, 0, "p1", "left");
                 CreateButton(150, 0, 140, 0, "p1");
                 CreateQuitButton(430, 0, 0, "p1", "right");
-                CreateQuitButton(610, -230, 1, "p1", "right");
+                //CreateQuitButton(610, -230, 1, "p1", "right");
                 CreateButton(800, 0, 140, 0, "p1");
                 CreateStartButton(1060, 0, 0, "p1");
 
