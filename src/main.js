@@ -320,7 +320,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             
             const toggler = new Lancelot.drawable.Rect({
                 fixed: false,
-                width: 16,
+                width: 20,
                 height: sprite._height,
                 zIndex: 6,
                 rotationCount: rotCount,
