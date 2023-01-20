@@ -11,8 +11,8 @@ class Game {
         this._renderer = new Lancelot.Renderer({
             container: document.getElementById("game-container"),
             canvas: document.getElementById("canvas"),
-            width: 720,
-            height: 720,
+            width: 1024,
+            height: 576,
             scenes: this._sceneManager
         });
 
@@ -28,7 +28,7 @@ class Game {
             jumping: false
         };
 
-        if("ontouchstart" in document) {
+        if ("ontouchstart" in document) {
             Lancelot.id("button-left").addEventListener("touchstart", () => this._input.left = true);
             Lancelot.id("button-left").addEventListener("touchend", () => this._input.left = false);
             Lancelot.id("button-right").addEventListener("touchstart", () => this._input.right = true);
@@ -40,41 +40,41 @@ class Game {
         }
 
         window.addEventListener("keydown", (e) => {
-            switch(e.key) {
+            switch (e.key) {
                 case "w":
                     this._input.jumping = true;
-                break;
+                    break;
                 case "a":
                     this._input.left = true;
-                break;
+                    break;
                 case "d":
                     this._input.right = true;
-                break;
+                    break;
 
             }
         });
         window.addEventListener("keyup", (e) => {
-            switch(e.key) {
+            switch (e.key) {
                 case "w":
                     this._input.jumping = false;
-                break;
+                    break;
                 case "a":
                     this._input.left = false;
-                break;
+                    break;
                 case "d":
                     this._input.right = false;
-                break;
+                    break;
 
             }
         });
-        
+
     }
     _Preload() {
 
         const loader = new Lancelot.Loader();
 
         loader
-        .OnProgress((val, obj) => console.log(`${obj.path} ... ${val * 100}%`))
+            .OnProgress((val, obj) => console.log(`${obj.path} ... ${val * 100}%`))
             .SetPath("res")
             .AddImage("player", "assets/player.png")
             .AddAudio("main-theme", "audio/journey-awaits.mp3")
@@ -82,48 +82,27 @@ class Game {
             .AddFont("main-font", "fonts/slkscre.ttf")
             .Load((resources) => {
 
-            this._resources = resources;
+                this._resources = resources;
 
-            this._renderer._canvas.style.fontFamily = this._resources.get("main-font");
-            Lancelot.id("end-section").style.fontFamily = this._resources.get("main-font");
+                this._renderer._canvas.style.fontFamily = this._resources.get("main-font");
+                Lancelot.id("end-section").style.fontFamily = this._resources.get("main-font");
 
-            Lancelot.hide(Lancelot.id("intro-section"));
-            Lancelot.show(Lancelot.id("play-section"));
+                Lancelot.hide(Lancelot.id("intro-section"));
+                Lancelot.show(Lancelot.id("play-section"));
 
-            this._ShowHelp();
+                const music = this._resources.get("main-theme");
+                music.loop = true;
+                music.volume = 0;
+                music.play();
 
-            const music = this._resources.get("main-theme");
-            music.loop = true;
-            music.play();
+                this._currentLevel = 0;
+                this._PlayLevel(this._currentLevel);
 
-            this._currentLevel = 0;
-            this._PlayLevel(this._currentLevel);
-
-        });
+            });
     }
-    _ShowHelp() {
-        alert(`
-MEMORY LEAK
-
-CONTROLS:
-PC:
-LEFT - A
-RIGHT - D
-JUMP - W
-ACTION - LEFT MOUSE
-MOBILE:
-LEFT, RIGHT, JUMP - BUTTONS
-ACTION - TOUCH
-
-GUIDE:
-GAME HAS 6 LEVELS
-YOUR TARGET IS TO REACH START OF EACH LEVEL
-MENU BUTTONS TRIGGER SPECIFIC ACTIONS AFTER YOU CLICK THEM OR TOUCH THEM WITH PLAYER
-TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT SIDE OF THE VOLUME RANGE 
-        `);
-    }
+    
     _PlayLevel(number) {
-        if(number > 6) {
+        if (number > 6) {
             Lancelot.show(Lancelot.id("end-section"));
             Lancelot.hide(Lancelot.id("play-section"));
             return;
@@ -133,7 +112,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
     }
     _CreateLevel(number) {
 
-        
+
 
         const scene = new Lancelot.Scene({
             resources: this._resources,
@@ -146,7 +125,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
 
         const CreatePlayer = (x, y) => {
             const player = new Lancelot.Entity();
-            
+
             const sprite = new Lancelot.drawable.Sprite({
                 width: 32,
                 height: 32,
@@ -201,13 +180,13 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
 
             scene._camera.Follow(player);
             player.body.AddBehavior("resolveCollision", "p1");
-            
+
             return player;
         }
 
         const CreateButton = (x, y, w, rotCount, groups, text = "") => {
             const button = new Lancelot.Entity();
-            for(let g of groups.split(" ")) {
+            for (let g of groups.split(" ")) {
                 button.groupList.add(g);
             }
             button.SetPosition(new Lancelot.Vector(x, y));
@@ -229,7 +208,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             scene.AddEntity(button);
             scene.SetInteractive(button, { capture: false });
             button.interactive.AddEventHandler("mousedown", () => {
-                if(Lancelot.physics.DetectCollision(button.body, scene.GetEntityByName("Pointer").body)) {
+                if (Lancelot.physics.DetectCollision(button.body, scene.GetEntityByName("Pointer").body)) {
                     buttonController._pressedByMouse = true;
                 }
             });
@@ -264,8 +243,8 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             button.groupList.add("q");
 
             const buttonMenu = new Lancelot.Entity();
-            
-            for(let g of groups.split(" ")) {
+
+            for (let g of groups.split(" ")) {
                 buttonMenu.groupList.add(g);
             }
             const sprite = new ButtonMenuSprite({
@@ -286,13 +265,13 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 x: buttonMenu._pos.x,
                 y: buttonMenu._pos.y,
                 menu: buttonMenu,
-                direction: (side == "right" ? rotCount : rotCount + 2) % 4 
+                direction: (side == "right" ? rotCount : rotCount + 2) % 4
             });
             button.AddComponent(menuController);
 
             button.GetComponent("ButtonController").action = (dur = 1000) => {
                 const quitButtons = scene.GetEntitiesByGroup("q");
-                for(let btn of quitButtons) {
+                for (let btn of quitButtons) {
                     btn.GetComponent("ButtonMenuController").Toggle(dur);
                 }
             }
@@ -300,14 +279,14 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             return button;
         }
 
-        const CreateOptButton = (x, y, rotCount, groups, side = "right") => {
+        const CreateOptButton = (x, y, rotCount, groups, side = "right", onValue = null) => {
             const w = 140;
             const button = CreateButton(x, y, w, rotCount, groups, "OPTIONS");
             button.groupList.add("o");
 
             const musicRange = new Lancelot.Entity();
 
-            for(let g of groups.split(" ")) {
+            for (let g of groups.split(" ")) {
                 musicRange.groupList.add(g);
             }
             musicRange.groupList.add("m");
@@ -317,7 +296,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             });
             musicRange.AddComponent(sprite, "Sprite");
             const angle = side == "right" ? Math.PI / 2 * rotCount : Math.PI / 2 * (rotCount + 2);
-            
+
             const toggler = new Lancelot.drawable.Rect({
                 fixed: false,
                 width: 20,
@@ -335,10 +314,10 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             musicRange.AddComponent(body, "Body");
 
             toggler._pos = body._pos;
-            
+
             musicRange.SetPosition(new Lancelot.Vector(x + Math.round(Math.cos(angle)) * (w - sprite._width) / 2, y + Math.round(Math.sin(angle)) * (w - sprite._width) / 2));
             body.SetPosition(new Lancelot.Vector(musicRange._pos.x, musicRange._pos.y));
-            
+
             scene.AddEntity(musicRange);
 
             const controller = new MusicRangeController({
@@ -346,28 +325,40 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             });
             musicRange.AddComponent(controller);
 
+            if (onValue) {
+                controller.onValue = onValue;
+            }
+
             scene.SetInteractive(musicRange, { capture: false });
             musicRange.interactive.AddEventHandler("mousedown", (e) => {
-                if(Lancelot.physics.DetectCollision(musicRange.body, scene.GetEntityByName("Pointer").body)) {
+                if (Lancelot.physics.DetectCollision(musicRange.body, scene.GetEntityByName("Pointer").body)) {
                     controller._pressed = true;
+                    const musicBars = scene.GetEntitiesByGroup("m");
+                    for(let bar of musicBars) {
+                        if(bar != musicRange) {
+                            bar.GetComponent("MusicRangeController").controlled = true;
+                        }
+                    }
                 }
             });
             musicRange.interactive.AddEventHandler("mousemove", (e) => {
-                if(controller._pressed) {
+                if (controller._pressed) {
                     controller.OnInput(e.x, e.y);
-                    const musicBars = scene.GetEntitiesByGroup("m");
+                    /*const musicBars = scene.GetEntitiesByGroup("m");
                     for(let bar of musicBars) {
                         const anotherCOntroller = bar.GetComponent("MusicRangeController");
                         anotherCOntroller._moving = controller._moving;
-                    }
+                    }*/
                 }
             });
             musicRange.interactive.AddEventHandler("mouseup", (e) => {
                 controller._pressed = false;
-                controller._moving = false;
+                //controller._moving = false;
                 const musicBars = scene.GetEntitiesByGroup("m");
                 for(let bar of musicBars) {
-                    bar.GetComponent("MusicRangeController")._moving = controller._moving;
+                    if(bar != musicRange) {
+                        bar.GetComponent("MusicRangeController").controlled = false;
+                    }
                 }
             });
 
@@ -375,13 +366,13 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 x: musicRange._pos.x,
                 y: musicRange._pos.y,
                 menu: musicRange,
-                direction: (side == "right" ? rotCount : rotCount + 2) % 4 
+                direction: (side == "right" ? rotCount : rotCount + 2) % 4
             });
             button.AddComponent(menuController);
 
             button.GetComponent("ButtonController").action = (dur = 1000) => {
                 const optButtons = scene.GetEntitiesByGroup("o");
-                for(let btn of optButtons) {
+                for (let btn of optButtons) {
                     btn.GetComponent("ButtonMenuController").Toggle(dur);
                 }
             }
@@ -392,7 +383,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
         const CreatePointer = (x, y) => {
 
             const UpdatePointer = (e) => {
-                if(e.id != 0) { return; }
+                if (e.id != 0) { return; }
                 pointer.GetComponent("PointerController")._mousePosition = new Lancelot.Vector(e.x + pointer.body.width / 2, e.y + pointer.body.height / 2);
             }
 
@@ -421,14 +412,14 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
             return pointer;
         }
 
-        const CreateTitle = (x, y, text = "MEMORY\nLEAK") => {
+        const CreateText = (x, y, text, fontSize) => {
             const title = new Lancelot.Entity();
 
             title.AddComponent(new Lancelot.drawable.Text({
                 zIndex: -99,
                 text: text,
                 fontFamily: "main-font",
-                fontSize: 64,
+                fontSize: fontSize,
                 color: "white"
             }));
 
@@ -448,21 +439,21 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
         glitcher._pos = glitcher.scene._camera._pos;
 
 
-        switch(number) {
+        switch (number) {
 
             case 0:
 
-                CreateTitle(0, -200);
+                CreateText(0, -200, "MEMORY\nLEAK", 64);
                 CreatePointer(0, 0);
                 CreateStartButton(0, 0, 0, "p1");
-                CreateOptButton(0, 80, 0, "p1");
+                CreateOptButton(0, 80, 0, "p1", "right", (value) => { scene._resources.get("main-theme").volume = value ** 2; });
                 CreateQuitButton(0, 160, 0, "p1", "left");
 
-            break;
+                break;
 
             case 1:
 
-                CreateTitle(0, -200);
+                CreateText(0, -200, "MEMORY\nLEAK", 64);
                 CreatePlayer(0, -200);
                 CreatePointer(0, 0);
                 CreateButton(0, 0, 140, 0, "p1");
@@ -474,7 +465,10 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(910, -40, 280, 0, "p1");
                 CreateStartButton(910, -250, 0, "p1");
 
-            break;
+                CreateText(1190, -250, "CLICK THE START BUTTON TO\nMOVE TO THE NEXT LEVEL", 16);
+                CreateText(280, 120, "CONTROLS:\nJUMP - W / UP BUTTON\nMOVE LEFT - A / LEFT BUTTON\nMOVE RIGHT - D / RIGHT BUTTON", 16);
+
+                break;
 
             case 2:
 
@@ -488,7 +482,10 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(800, 0, 140, 0, "p1");
                 CreateStartButton(1060, 0, 0, "p1");
 
-            break;
+                CreateText(-320, 140, "THERE ARE ACTION BUTTONS\nTHEY HAVE TEXT ON THEM", 16);
+                CreateText(650, -220, "USE THE ARROW CURSOR TO CLICK\nTHEM OR JUMP ON THEM\nTO TRIGGER THEIR ACTIONS", 16);
+
+                break;
 
             case 3:
 
@@ -505,7 +502,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(500, -90, 140, 0, "p1");
                 CreateStartButton(800, -255, 0, "p1");
 
-            break;
+                break;
 
             case 4:
 
@@ -519,7 +516,7 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(160, -210, 280, 1, "p2");
                 CreateButton(360, -210, 280, 3, "p2");
 
-            break;
+                break;
 
             case 5:
 
@@ -528,10 +525,10 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(-400, 0, 70, 0, "p1");
                 CreateButton(-240, -40, 70, 0, "p1");
                 CreateButton(-40, -80, 140, 0, "p1");
-                let button = CreateQuitButton(-40, -235, 3, "p1 p2", "right");
+                let button = CreateQuitButton(-40, -230, 3, "p1 p2", "right");
                 button.GetComponent("ButtonController").action(100);
-                CreateOptButton(140, -40, 3, "p1", "right");
-                CreateButton(185, -110, 280, 3, "p1");
+                CreateOptButton(140, -20, 3, "p1", "right");
+                CreateButton(185, -100, 300, 3, "p1");
                 CreateStartButton(260, 100, 0, "p1");
 
                 CreateButton(-140, -285, 140, 0, "p2");
@@ -546,12 +543,12 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
 
                 CreateOptButton(100, -350, 0, "", "right");
 
-            break;
+                break;
 
             case 6:
 
                 CreatePlayer(-400, -200);
-                CreatePointer(-300, -350);
+                CreatePointer(-300, -350 +80);
                 CreateButton(-400, 0, 70, 0, "p1");
                 CreateQuitButton(-50, 0, 0, "p1", "left");
                 CreateButton(200, 0, 70, 0, "p1");
@@ -563,22 +560,22 @@ TO CHANGE VOLUME OPEN OPTIONS, CLICK THE WHITE THING AND MOVE BEHIND LEFT/RIGHT 
                 CreateButton(1500, -120, 70, 0, "p1");
                 CreateStartButton(1700, -120, 0, "p1");
 
-                CreateButton(-325, -285, 280, 0, "p2");
-                CreateButton(-40, -285, 280, 0, "p2");
-                CreateButton(245, -285, 280, 0, "p2");
-                CreateButton(-475, -370, 140, 1, "p2");
-                CreateButton(385, -370, 140, 3, "p2");
-                CreateButton(-325, -420, 280, 2, "p2");
-                CreateButton(-40, -420, 280, 2, "p2");
-                CreateButton(245, -420, 280, 2, "p2");
+                CreateButton(-325, -285 + 80, 280, 0, "p2");
+                CreateButton(-40, -285 + 80, 280, 0, "p2");
+                CreateButton(245, -285 + 80, 280, 0, "p2");
+                CreateButton(-475, -370 + 80, 140, 1, "p2");
+                CreateButton(385, -370 + 80, 140, 3, "p2");
+                CreateButton(-325, -420 + 80, 280, 2, "p2");
+                CreateButton(-40, -420 + 80, 280, 2, "p2");
+                CreateButton(245, -420 + 80, 280, 2, "p2");
 
-                CreateQuitButton(-350, -350, 0, "", "right");
-                CreateOptButton(280, -350, 0, "", "left");
+                CreateQuitButton(-350, -350 + 80, 0, "", "right");
+                CreateOptButton(280, -350 + 80, 0, "", "left");
 
-            break;
+                break;
 
         }
-        
+
     }
 }
 
@@ -588,12 +585,12 @@ class PlayerController extends Lancelot.Component {
         this._dieAction = params.dieAction;
     }
     Update(elapsedTimeS) {
-        
+
         const sprite = this.GetComponent("Sprite");
         const body = this._parent.body;
 
         const input = this.scene._input;
-        
+
         body._vel.y += 750 * elapsedTimeS;
 
         if (input.right) {
@@ -609,22 +606,22 @@ class PlayerController extends Lancelot.Component {
             body._vel.y = -350;
         }
 
-        if(!body._collisions.bottom.size) {
+        if (!body._collisions.bottom.size) {
             sprite.PlayAnim("jump", 100, false);
         } else {
-            if(Math.abs(body._vel.x) > 50) {
+            if (Math.abs(body._vel.x) > 50) {
                 sprite.PlayAnim("run", 120, true);
             } else {
                 sprite.PlayAnim("idle", 100, false);
             }
         }
 
-        if(body._pos.y > 500) {
+        if (body._pos.y > 500) {
             this._dieAction();
         }
-    
+
     }
-        
+
 }
 
 class ButtonSprite extends Lancelot.drawable.Drawable {
@@ -654,7 +651,7 @@ class ButtonSprite extends Lancelot.drawable.Drawable {
         ctx.fill();
         ctx.stroke();
         ctx.save();
-        if(!this._pressed) {
+        if (!this._pressed) {
             ctx.translate(0, -6);
         }
         ctx.fillStyle = "black";
@@ -664,7 +661,7 @@ class ButtonSprite extends Lancelot.drawable.Drawable {
         ctx.rect(-this._width / 2, -this._height / 2, this._width, this._height);
         ctx.fill();
         ctx.stroke();
-        if(this._text.length) {
+        if (this._text.length) {
             ctx.fillStyle = "white";
             ctx.font = `${24}px '${this._fontFamily}'`;
             ctx.textAlign = "center";
@@ -688,14 +685,16 @@ class ButtonController extends Lancelot.Component {
         const sprite = this.GetComponent("ButtonSprite");
         this._pressedByPlayer = Object.values(body._collisions).some(_ => _.size);
         const pressed = (this._pressedByMouse || this._pressedByPlayer);
-        if(!sprite._pressed && pressed) {
+        if (!sprite._pressed && pressed) {
             try {
-                this.scene._resources.get("click-sound").cloneNode(true).play();
-            } catch(err) {
-                
+                const sound = this.scene._resources.get("click-sound").cloneNode(true);
+                sound.volume = this.scene._resources.get("main-theme").volume ** 0.5;
+                sound.play();
+            } catch (err) {
+
             }
 
-            if(this.action) this.action();
+            if (this.action) this.action();
         }
         sprite._pressed = pressed;
     }
@@ -770,7 +769,7 @@ class ButtonMenuController extends Lancelot.Component {
     _Init() {
         let vec;
         const sprite = this._menu.GetComponent("Sprite");
-        switch(this._direction) {
+        switch (this._direction) {
             case 0:
                 vec = new Lancelot.Vector(sprite._width, 0);
                 break;
@@ -787,10 +786,10 @@ class ButtonMenuController extends Lancelot.Component {
         this._vec = vec;
     }
     Toggle(dur) {
-        
-        if(this._menu.animator._moving) { return; }
 
-        if(!this._opened) {
+        if (this._menu.animator._moving) { return; }
+
+        if (!this._opened) {
             this._menu.animator.MoveTo(this._menuPosition.Clone().Add(this._vec), dur, "ease-in");
         } else {
             this._menu.animator.MoveTo(this._menuPosition.Clone(), dur, "ease-in");
@@ -854,48 +853,80 @@ class MusicRangeController extends Lancelot.Component {
         this._mousePosition = new Lancelot.Vector();
         this._direction = params.direction;
         this._moving = 0;
+        this._value = 0;
+        this._input = [0, 0];
+        this.controlled = false;
+        this.onValue = (val) => { }
     }
     OnInput(x, y) {
-
-        const sprite = this.GetComponent("Sprite");
-        if(this._direction % 2 == 0) {
-            if(x > this._parent._pos.x + sprite._width / 2) this._moving = 1;
-            else if(x < this._parent._pos.x - sprite._width / 2) this._moving = -1;
-            else this._moving = 0;
-        } else {
-            if(y > this._parent._pos.y + sprite._width / 2) this._moving = 1;
-            else if(y < this._parent._pos.y - sprite._width / 2) this._moving = -1;
-            else this._moving = 0;
-        }
-        if(this._direction > 1) this._moving *= -1;
+        this._input[0] = x;
+        this._input[1] = y;
     }
     Update(elapsedTimeS) {
-        
+
         const speed = 50;
         const body = this._parent.body;
         const sprite = this.GetComponent("Sprite");
 
-        if(this._moving == 0) {
-            body._vel.x = body._vel.y = 0;
-        } else {
-
-            let v = this._moving == 1 ? speed : -speed;
-            if(this._direction == 2 || this._direction == 3) v *= -1;
-            let a = sprite._width * 0.20;
-            let b = sprite._width * 0.34;
-            if(this._direction == 2 || this._direction == 3) {
-                [a, b] = [b, a];
+        if (!this.controlled) {
+            if (this._pressed) {
+                const [x, y] = this._input;
+                if (this._direction % 2 == 0) {
+                    if (x > body._pos.x + body._width / 2/*this._parent._pos.x + sprite._width / 2*/) this._moving = 1;
+                    else if (x < body._pos.x - body._width / 2/*this._parent._pos.x - sprite._width / 2*/) this._moving = -1;
+                    else this._moving = 0;
+                } else {
+                    if (y > body._pos.y + body._height / 2/*this._parent._pos.y + sprite._width / 2*/) this._moving = 1;
+                    else if (y < body._pos.y - body._height / 2/*this._parent._pos.y - sprite._width / 2*/) this._moving = -1;
+                    else this._moving = 0;
+                }
+                if (this._direction > 1) this._moving *= -1;
             }
-
-            if(this._direction % 2 == 0) {
-                if(!((body._pos.x < this._parent._pos.x - a && v < 0) || (body._pos.x > this._parent._pos.x + b && v > 0))) body._vel.x = v;
-                else body._vel.x = 0; 
-            } else {
-                if(!((body._pos.y < this._parent._pos.y - a && v < 0) || (body._pos.y > this._parent._pos.y + b && v > 0))) body._vel.y = v;
-                else body._vel.y = 0;
+            else {
+                this._moving = 0;
             }
-
+            const musicBars = this.scene.GetEntitiesByGroup("m");
+            for (let bar of musicBars) {
+                const anotherCOntroller = bar.GetComponent("MusicRangeController");
+                anotherCOntroller._moving = this._moving;
+            }
         }
+
+        let v = 0;
+        if (this._moving == 1) {
+            v = speed;
+        }
+        else if (this._moving == -1) {
+            v = -speed;
+        }
+        if (this._direction == 2 || this._direction == 3) v *= -1;
+        let a = sprite._width * 0.20;
+        let b = sprite._width * 0.34;
+        if (this._direction == 2 || this._direction == 3) {
+            [a, b] = [b, a];
+        }
+
+        let p1, p2, p;
+        if (this._direction % 2 == 0) {
+            if (!((body._pos.x < this._parent._pos.x - a && v < 0) || (body._pos.x > this._parent._pos.x + b && v > 0))) body._vel.x = v;
+            else body._vel.x = 0;
+            p1 = this._parent._pos.x - a;
+            p2 = this._parent._pos.x + b;
+            p = body._pos.x;
+        } else {
+            if (!((body._pos.y < this._parent._pos.y - a && v < 0) || (body._pos.y > this._parent._pos.y + b && v > 0))) body._vel.y = v;
+            else body._vel.y = 0;
+            p1 = this._parent._pos.y - a;
+            p2 = this._parent._pos.y + b;
+            p = body._pos.y;
+        }
+        this._value = Lancelot.math.sat((p - p1) / (p2 - p1));
+
+        if (this._moving == 0) {
+            body._vel.x = body._vel.y = 0;
+        }
+
+        this.onValue(this._value);
 
     }
 }
@@ -908,12 +939,12 @@ class PointerController extends Lancelot.Component {
     Update(elapsedTimeS) {
         const body = this._parent.body;
         const vec = this._mousePosition.Clone().Sub(body._pos);
-        
-        if(vec.Mag() < 1) {
+
+        if (vec.Mag() < 1) {
             vec.Mult(0);
-        } else if(vec.Mag() < 5) {
+        } else if (vec.Mag() < 5) {
             vec.Mult(100);
-        } else if(vec.Mag() < 50) {
+        } else if (vec.Mag() < 50) {
             vec.Unit().Mult((vec.Mag() * 20) ** 2);
         } else {
             vec.Unit().Mult((vec.Mag() * 10) ** 3);
@@ -966,17 +997,17 @@ class Glitcher extends Lancelot.drawable.Drawable {
     }
     Draw(ctx) {
         const maxSize = 200;
-        if(!this._active) { return; }
+        if (!this._active) { return; }
         ++this._counter;
-        if(this._counter == this._dur) {
+        if (this._counter == this._dur) {
             this._dur = Lancelot.math.randint(2, 20);
             this._counter = 0;
-            for(let i = 0; i < 20; ++i) {
+            for (let i = 0; i < 20; ++i) {
                 const imgData = ctx.getImageData(Lancelot.math.rand(0, ctx.canvas.width - maxSize), Lancelot.math.rand(0, ctx.canvas.height - maxSize), Lancelot.math.rand(1, maxSize), Lancelot.math.rand(1, maxSize));
                 this._imgData[i] = [imgData, Lancelot.math.rand(0, ctx.canvas.width - maxSize), Lancelot.math.rand(0, ctx.canvas.height - maxSize)];
             }
         }
-        for(let e of this._imgData) {
+        for (let e of this._imgData) {
             ctx.putImageData(e[0], e[1], e[2]);
         }
     }
